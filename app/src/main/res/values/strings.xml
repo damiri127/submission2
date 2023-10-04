@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">RestaurantReview</string>
+    <string name="title">Judul</string>
+    <string name="description">Description</string>
+    <string name="review">Review</string>
+    <string name="write_your_review_here">Write your review here..</string>
+    <string name="send">Kirim</string>
+    <string name="searchbar_hint">Cari User</string>
+    <string name="tabs_1">Followers</string>
+    <string name="tabs_2">Following</string>
+    <string name="following">"%d following"</string>
+    <string name="follower">"%d followers"</string>
+</resources>
