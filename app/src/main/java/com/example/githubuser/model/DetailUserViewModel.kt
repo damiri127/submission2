@@ -2,19 +2,12 @@ package com.example.githubuser.model
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.githubuser.data.api.ApiConfig
 import com.example.githubuser.data.response.DetailUserResponse
-import com.example.githubuser.database.FavoriteUserDao
 import com.example.githubuser.database.FavoriteUser
-import com.example.githubuser.database.UserDatabase
-import com.example.githubuser.repository.FavoriteRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,14 +15,10 @@ import retrofit2.Response
 class DetailUserViewModel(application: Application) : ViewModel() {
     private val user = MutableLiveData<DetailUserResponse>()
     private val _isLoading = MutableLiveData<Boolean>()
-    private val mFavoriteRepository: FavoriteRepository = FavoriteRepository(application)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun insert(favoriteUser: FavoriteUser){
-        mFavoriteRepository.insert(favoriteUser)
-    }
+    var favUser = FavoriteUser()
 
-    fun getAllData(): LiveData<List<FavoriteUser>> = mFavoriteRepository.getAllData()
 
     companion object {
         const val TAG = "DetailUserModel"

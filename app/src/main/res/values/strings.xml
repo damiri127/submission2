@@ -10,4 +10,7 @@
     <string name="tabs_2">Following</string>
     <string name="following">"%d following"</string>
     <string name="follower">"%d followers"</string>
+    <string name="favorite_menu">Menu</string>
+    <string name="setting">Setting</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>

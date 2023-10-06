@@ -44,7 +44,7 @@ class UserViewModel: ViewModel() {
                     }
                 }else{
                     val errorBody = response.errorBody()
-                    Log.e(TAG,"karena ${errorBody.toString()}")
+                    Log.e(TAG,"test $errorBody")
                 }
             }
 

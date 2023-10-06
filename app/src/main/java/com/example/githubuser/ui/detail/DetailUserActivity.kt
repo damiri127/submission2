@@ -1,32 +1,34 @@
 package com.example.githubuser.ui.detail
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.example.githubuser.database.FavoriteUser
 import com.example.githubuser.model.DetailUserViewModel
+import com.example.githubuser.model.FavoriteUserViewModel
 import com.example.githubuser.model.ViewModelFactory
 import com.example.restaurantreview.R
 import com.example.restaurantreview.databinding.ActivityDetailUserBinding
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailUserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailUserBinding
+    private lateinit var detailUserViewModel: DetailUserViewModel
+
+    private val favoriteUserViewModel by viewModels<FavoriteUserViewModel> {
+        ViewModelFactory.getInstance(application)
+    }
 
     private val viewModel by viewModels<DetailUserViewModel> {
         ViewModelFactory.getInstance(application)
     }
-    private val favoriteUser = FavoriteUser()
+
 
     companion object{
         const val EXTRA_USERNAME = "extra_username"
@@ -42,16 +44,15 @@ class DetailUserActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val username = intent.getStringExtra(EXTRA_USERNAME)
-        val avatar = intent.getStringExtra(AVATAR_URL)
 
         viewModel.isLoading.observe(this){
             showLoading(it)
         }
 
-        // set favorite user
-        binding.fab.setOnClickListener {
-            viewModel.insert(favoriteUser)
-        }
+        // menghubungkan viewModel dengan activity
+
+        detailUserViewModel = obtainViewModel(this@DetailUserActivity)
+
 
         if (username != null) {
             viewModel.setUserDetail(username)
@@ -68,8 +69,24 @@ class DetailUserActivity : AppCompatActivity() {
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .centerCrop()
                         .into(ivProfile)
+
+                    favoriteUserViewModel.favoriteUser.username = it.login
+                    favoriteUserViewModel.favoriteUser.avatarUrl = it.avatarUrl
+
+                    favoriteUserViewModel.getUserFavorite().observe(this@DetailUserActivity){
+                        binding.fab.isChecked = it?.username != null
+
+                        binding.fab.setOnClickListener {fav ->
+                            if(it?.username != null){
+                                favoriteUserViewModel.delete(viewModel.favUser)
+                            }else{
+                                favoriteUserViewModel.insert(viewModel.favUser)
+                            }
+                        }
+                    }
                 }
             }
+
 
             val sectionPagerAdapter = SectionPagerAdapter(this)
             val viewPager: ViewPager2 = findViewById(R.id.view_pager)
@@ -81,6 +98,11 @@ class DetailUserActivity : AppCompatActivity() {
             }.attach()
 
         }
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): DetailUserViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory).get(DetailUserViewModel::class.java)
     }
 
     private fun showLoading(isLoading: Boolean){
