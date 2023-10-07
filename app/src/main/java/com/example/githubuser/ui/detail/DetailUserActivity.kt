@@ -32,7 +32,6 @@ class DetailUserActivity : AppCompatActivity() {
 
     companion object{
         const val EXTRA_USERNAME = "extra_username"
-        const val AVATAR_URL = "avatarUrl"
     }
 
     @StringRes
@@ -70,8 +69,8 @@ class DetailUserActivity : AppCompatActivity() {
                         .centerCrop()
                         .into(ivProfile)
 
-                    favoriteUserViewModel.favoriteUser.username = it.login
-                    favoriteUserViewModel.favoriteUser.avatarUrl = it.avatarUrl
+                    viewModel.favUser.username = it.login
+                    viewModel.favUser.avatarUrl = it.avatarUrl
 
                     favoriteUserViewModel.getUserFavorite().observe(this@DetailUserActivity){
                         binding.fab.isChecked = it?.username != null

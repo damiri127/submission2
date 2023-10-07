@@ -22,9 +22,9 @@ class ListFavUserAdapter: ListAdapter<FavoriteUser, ListFavUserAdapter.ListViewH
         val data = getItem(position)
         holder.bind(data)
         holder.itemView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, DetailUserActivity::class.java)
-            intent.putExtra("USERNAME", data.username.toString())
-            holder.itemView.context.startActivity(intent)
+            val intentFavoriteUser = Intent(holder.itemView.context, DetailUserActivity::class.java)
+            intentFavoriteUser.putExtra(DetailUserActivity.EXTRA_USERNAME, data.username)
+            holder.itemView.context.startActivity(intentFavoriteUser)
         }
     }
 
